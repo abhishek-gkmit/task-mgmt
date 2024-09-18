@@ -10,15 +10,22 @@
 
 <body>
   <div id="app">
-    <ul id="task-list">
-      <li class="task">
-        <input type="text" class="task-input" value="Sample Task">
+    <ul id="tasks-list">
+      <li>
+        <p class="task">Sample Task</p>
       </li>
     </ul>
     <button id="add-btn">
-
+      Add Task
     </button>
+
+    <div id="add-task-modal" class="hide-modal">
+      <input type="text" class="task-input" placeholder="Enter task name">
+      <button class="task-submit-btn">Add Task</button>
+    </div>
   </div>
+
+  <script src="script.js" async defer></script>
 </body>
 
 </html>
