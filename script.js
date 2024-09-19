@@ -21,7 +21,14 @@ function addEventListeners() {
   });
 
   var filters = document.querySelector('.filters');
-  filters.addEventListener('change', (event) => displayTasks());
+  filters.addEventListener('change', () => displayTasks());
+
+  // make the task-input have focus all the time
+  document.querySelector('.task-input').addEventListener('blur', function makeInputFocus(event) {
+    // I tried "event.target.focus()" but somehow it didn't work
+    // then I saw this solution on StackOverFlow
+    setTimeout(() => event.target.focus(), 100);
+  });
 }
 
 function addTaskHandler(event){
@@ -93,8 +100,6 @@ function displayTasks() {
     ul.appendChild(li);
   });
 
-  // set the focus to task-input
-  document.querySelector('.task-input').focus();
 }
 
 function addTask(id, name, completed=false){
