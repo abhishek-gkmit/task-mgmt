@@ -26,6 +26,9 @@ function addEventListeners() {
   var filters = document.querySelector('.filters');
   filters.addEventListener('change', () => displayTasks());
 
+  var priorityFilter = $('.priority-filter');
+  priorityFilter.addEventListener('change', () => displayTasks());
+
 }
 
 function handleEnterKey(event) {
@@ -37,14 +40,16 @@ function handleEnterKey(event) {
 
 function addTaskHandler(event){
   var taskInput = document.querySelector('.task-input');
+  var taskPriority = $('.priority').value;
   var name = taskInput.value;
 
   if(!name){
+    console.log('Empty task can not be added');
     return;
   }
 
   // calling the API function and saving the task
-  addTask(Date.now(), name);
+  addTask(Date.now(), name, false, taskPriority);
 
   // clearing task after adding
   taskInput.value = '';
@@ -109,6 +114,10 @@ function displayTasks() {
     filteredTasks = filterTasks(false);
   }
 
+  // sort filteredTasks according to priority
+  var priorityFilter = $('.priority-filter').value;
+  filteredTasks = sortWithPriority(filteredTasks, priorityFilter);
+
   filteredTasks.forEach(function taskToElement(task) {
     var li = document.createElement('li');
     li.classList.add('task-container');
@@ -131,22 +140,30 @@ function displayTasks() {
     deleteBtn.classList.add('delete-btn');
     // deleteBtn.innerText = 'Delete';
     deleteBtn.innerText = '❌';
+    deleteBtn.setAttribute('title', 'Delete task');
     deleteBtn.addEventListener('click', (event) => deleteTask(task.id));
 
     var completeBtn = document.createElement('button');
     completeBtn.classList.add('complete-btn');
     // completeBtn.innerText = 'Mark Complete';
     completeBtn.innerText = '✅';
+    completeBtn.setAttribute('title', 'Mark task as completed');
     completeBtn.addEventListener('click', (event) => completeTask(task.id));
 
     var updateBtn = document.createElement('button');
     updateBtn.classList.add('update-btn');
     // updateBtn.innerText = 'Edit';
     updateBtn.innerText = '✏️';
+    updateBtn.setAttribute('title', 'Edit task');
     updateBtn.addEventListener('click', (event) => updateTaskHandler(event, task));
+
+    var priority = document.createElement('p');
+    priority.classList.add(task.priority);
+    priority.innerText = task.priority.charAt(0).toUpperCase() + task.priority.slice(1);
 
 
     li.appendChild(p);
+    container.appendChild(priority);
     container.appendChild(deleteBtn);
     container.appendChild(completeBtn);
     container.appendChild(updateBtn);
@@ -160,11 +177,12 @@ function displayTasks() {
 
 }
 
-function addTask(id, name, completed=false){
+function addTask(id, name, completed=false, priority='normal'){
   tasks.list = tasks.list.concat([{
     id,
     name,
-    completed
+    completed,
+    priority
   }]);
 
   // re-rendering the tasks on the webpage
@@ -252,11 +270,28 @@ function loadTasks() {
 
   setTimeout(function() {
     displayTasks();
-  }, 0);
+  }, 2000);
 
   return tasks;
 }
 
 async function loadTasksAsync() {
 
+}
+
+function sortWithPriority(filteredTasks, priority) {
+  filteredTasks = filteredTasks.sort(function compare(a, b) {
+    if(a.priority === priority){
+      // a should come before b
+      return -1;
+    } else if(b.priority === priority){
+      // b should come before a
+      return 1;
+    }
+
+    // a and b both are equal
+    return 0;
+  });
+
+  return filteredTasks;
 }

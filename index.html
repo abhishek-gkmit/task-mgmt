@@ -12,18 +12,36 @@
   <div id="app">
     <div class="add-task-container">
       <input type="text" class="task-input" placeholder="Enter task name" autofocus>
-      <button class="task-add-btn">Add Task</button>
+      <select name="priority" class="priority" title="Select task priority">
+        <option value="normal">Normal</option>
+        <option value="high">High</option>
+        <option value="urgent">Urgent</option>
+      </select>
+      <button class="task-add-btn" title="Add task to task list">Add Task</button>
     </div>
 
-    <select class="filters" name="filter">
-      <option value="all" selected>All</option>
-      <option value="completed">Completed</option>
-      <option value="pending">Pending</option>
-    </select>
+    <div class="filter-container">
+      <label for="state-filter">Arrange by state: </label>
+      <select id="state-filter" class="filters" name="filter" title="Select filter">
+        <option value="all" selected>All</option>
+        <option value="completed">Completed</option>
+        <option value="pending">Pending</option>
+      </select>
+    </div>
+
+    <div class="filter-container">
+      <label for="priority-filter">Sort by priority: </label>
+      <select id="priority-filter" name="priorityFilter" class="priority-filter" title="Select task priority">
+        <option value="normal">Normal</option>
+        <option value="high">High</option>
+        <option value="urgent">Urgent</option>
+      </select>
+    </div>
 
     <ul id="tasks-list">
       <li>
-        <p>Loading Tasks...</p>
+        <!-- <p style="text-align: center;">Loading Tasks...</p> -->
+        <div class="loader"></div>
       </li>
     </ul>
   </div>
