@@ -9,17 +9,15 @@
   flex-direction: column;
   align-items: center;
   gap: 5px;
-}
-
-.hide-app {
-  display: none;
+  font-size: 18px;
 }
 
 #tasks-list {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  gap: 10px;
   list-style: none;
+  padding: 10px;
 }
 
 .add-task-container {
@@ -29,6 +27,20 @@
 }
 
 .task-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 5px;
+  border: 1px solid rgba(32, 32, 32, 0.5);
+  transition: 0.3s;
+}
+
+.task-container:hover {
+  box-shadow: 2px 2px 5px 2px rgba(0, 0, 0, 0.4);
+  border-radius: 10px;
+}
+
+.btn-container {
   display: flex;
   gap: 5px;
 }
@@ -40,4 +52,34 @@
 
 .completed-task {
   color: green;
+}
+
+.delete-btn,
+.complete-btn,
+.update-btn,
+.task-add-btn {
+  font-size: 16px;
+  padding: 2px 4px;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  border-radius: 5px;
+  transition: 0.2s;
+}
+
+.delete-btn:hover {
+  /* background-color: red; */
+  border-color: red;
+}
+
+.complete-btn:hover {
+  background-color: green;
+  border-color: green;
+}
+
+.update-btn:hover {
+  background-color: #ff8300;
+}
+
+.filters {
+  font-size: 16px;
+  padding: 2px 4px;
 }

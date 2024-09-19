@@ -1,4 +1,4 @@
-var tasks = loadTasks();
+var tasks;
 
 // document.querySelector shortcut
 var $ = function (selector) {
@@ -7,6 +7,7 @@ var $ = function (selector) {
 
 
 document.addEventListener('DOMContentLoaded', function setup() {
+  tasks = loadTasks();
   addEventListeners();
 });
 
@@ -98,6 +99,7 @@ function displayTasks() {
   var ul = document.querySelector('#tasks-list');
   ul.replaceChildren();
 
+  // displaying tasks according to filter
   var filteredTasks = tasks.list;
 
   var filter = document.querySelector('.filters').value;
@@ -121,27 +123,34 @@ function displayTasks() {
     }
 
 
-    // TODO: add deletBtn, completeBtn, updateBtn
+    var container = document.createElement('div');
+    container.classList.add('btn-container');
+
+    // delete, complete, update
     var deleteBtn = document.createElement('button');
     deleteBtn.classList.add('delete-btn');
-    deleteBtn.innerText = 'Delete';
+    // deleteBtn.innerText = 'Delete';
+    deleteBtn.innerText = '❌';
     deleteBtn.addEventListener('click', (event) => deleteTask(task.id));
 
     var completeBtn = document.createElement('button');
     completeBtn.classList.add('complete-btn');
-    completeBtn.innerText = 'Mark Complete';
+    // completeBtn.innerText = 'Mark Complete';
+    completeBtn.innerText = '✅';
     completeBtn.addEventListener('click', (event) => completeTask(task.id));
 
     var updateBtn = document.createElement('button');
     updateBtn.classList.add('update-btn');
-    updateBtn.innerText = 'Edit';
+    // updateBtn.innerText = 'Edit';
+    updateBtn.innerText = '✏️';
     updateBtn.addEventListener('click', (event) => updateTaskHandler(event, task));
 
 
     li.appendChild(p);
-    li.appendChild(deleteBtn);
-    li.appendChild(completeBtn);
-    li.appendChild(updateBtn);
+    container.appendChild(deleteBtn);
+    container.appendChild(completeBtn);
+    container.appendChild(updateBtn);
+    li.appendChild(container);
 
     ul.appendChild(li);
   });
@@ -243,7 +252,7 @@ function loadTasks() {
 
   setTimeout(function() {
     displayTasks();
-  }, 2000);
+  }, 0);
 
   return tasks;
 }
