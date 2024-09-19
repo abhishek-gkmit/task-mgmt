@@ -7,37 +7,94 @@ document.addEventListener('DOMContentLoaded', function setup() {
 
 function addEventListeners() {
   console.log('adding event listeners');
-  var addBtn = document.querySelector('#add-btn');
-  addBtn.addEventListener('click', addTaskHandler);
-}
 
-function addTaskHandler(event){
-  var modal = document.querySelector('#add-task-modal');
-  modal.classList.toggle('hide-modal');
-  modal.classList.toggle('show-modal');
+  var addBtn = document.querySelector('.task-add-btn');
+  addBtn.addEventListener('click', addTaskHandler);
 
   var taskInput = document.querySelector('.task-input');
   taskInput.focus();
 
-  var taskSubmitBtn = document.querySelector('.task-submit-btn');
-  taskSubmitBtn.addEventListener('click', addTaskWrapper);
+  taskInput.addEventListener('keyup', function handleEnterKey(event) {
+    if(event.key === 'Enter'){
+      addTaskHandler(event);
+    }
+  });
 
-  function addTaskWrapper(event) {
-    var name = taskInput.value;
-    addTask(Date.now(), name);
+  var filters = document.querySelector('.filters');
+  filters.addEventListener('change', (event) => displayTasks());
+}
+
+function addTaskHandler(event){
+  var taskInput = document.querySelector('.task-input');
+  var name = taskInput.value;
+
+  if(!name){
+    return;
   }
+
+  // calling the API function and saving the task
+  addTask(Date.now(), name);
+
+  // clearing task after adding
+  taskInput.value = '';
 }
 
 // API functions
 
 function displayTasks() {
   var ul = document.querySelector('#tasks-list');
+  ul.replaceChildren();
 
-  ul.innerHTML = tasks.map(function taskToElement(task) {
-    return `<li data-id="${task.id}" data-completed="${task.completed}>
-              <p class="task-name">${task.name}</p>
-            </li>`;
-  }).join('\n');
+  var filteredTasks = tasks;
+
+  var filter = document.querySelector('.filters').value;
+  if(filter === 'completed'){
+    filteredTasks = filterTasks();
+  } else if(filter === 'pending') {
+    filteredTasks = filterTasks(false);
+  }
+
+  filteredTasks.forEach(function taskToElement(task) {
+    var li = document.createElement('li');
+    li.classList.add('task-container');
+    li.setAttribute('data-id', task.id);
+    li.setAttribute('data-completed', task.completed);
+
+    var p = document.createElement('p');
+    p.classList.add('task-name');
+    p.innerText = task.name;
+    if(task.completed){
+      p.classList.add('completed-task');
+    }
+
+
+    // TODO: add deletBtn, completeBtn, updateBtn
+    var deleteBtn = document.createElement('button');
+    deleteBtn.classList.add('delete-btn');
+    deleteBtn.innerText = 'Delete';
+    deleteBtn.addEventListener('click', (event) => deleteTask(task.id));
+
+    var completeBtn = document.createElement('button');
+    completeBtn.classList.add('complete-btn');
+    completeBtn.innerText = 'Mark Complete';
+    completeBtn.addEventListener('click', (event) => completeTask(task.id));
+
+    var updateBtn = document.createElement('button');
+    updateBtn.classList.add('update-btn');
+    updateBtn.innerText = 'Edit';
+    // updateBtn.addEventListener('click', )
+
+
+    li.appendChild(p);
+    li.appendChild(deleteBtn);
+    li.appendChild(completeBtn);
+    li.appendChild(updateBtn);
+
+    ul.appendChild(li);
+  });
+
+  // set the focus to task-input
+  document.querySelector('.task-input').focus();
 }
 
 function addTask(id, name, completed=false){
@@ -61,7 +118,9 @@ function completeTask(id) {
     }
 
     return task;
-  })
+  });
+
+  displayTasks();
 }
 
 /* Update the task in the task array*/
@@ -90,6 +149,8 @@ function deleteTask(id) {
 
     return true;
   });
+
+  displayTasks();
 }
 
 /* Filter the tasks according to the completed state
