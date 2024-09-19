@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <div id="app">
+  <div id="app" class="hide-app">
     <div class="add-task-container">
       <input type="text" class="task-input" placeholder="Enter task name" autofocus>
       <button class="task-add-btn">Add Task</button>
@@ -23,11 +23,12 @@
 
     <ul id="tasks-list">
       <li>
+        <p>Loading...</p>
       </li>
     </ul>
   </div>
 
-  <script src="script.js" async defer></script>
+  <script src="script.js" type="module" async defer></script>
 </body>
 
 </html>

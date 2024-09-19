@@ -11,7 +11,14 @@
   gap: 5px;
 }
 
-ul {
+.hide-app {
+  display: none;
+}
+
+#tasks-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
   list-style: none;
 }
 

@@ -1,9 +1,15 @@
-var tasks = [];
+var tasks = loadTasks();
+
+// document.querySelector shortcut
+var $ = function (selector) {
+  return document.querySelector(selector);
+}
 
 
 document.addEventListener('DOMContentLoaded', function setup() {
   addEventListeners();
 });
+
 
 function addEventListeners() {
   console.log('adding event listeners');
@@ -13,23 +19,20 @@ function addEventListeners() {
 
   var taskInput = document.querySelector('.task-input');
   taskInput.focus();
+  taskInput.addEventListener('keyup', handleEnterKey);
 
-  taskInput.addEventListener('keyup', function handleEnterKey(event) {
-    if(event.key === 'Enter'){
-      addTaskHandler(event);
-    }
-  });
-
+  // updates the display whenever the filter changes
   var filters = document.querySelector('.filters');
   filters.addEventListener('change', () => displayTasks());
 
-  // make the task-input have focus all the time
-  document.querySelector('.task-input').addEventListener('blur', function makeInputFocus(event) {
-    // I tried "event.target.focus()" but somehow it didn't work
-    // then I saw this solution on StackOverFlow
-    setTimeout(() => event.target.focus(), 100);
-  });
 }
+
+function handleEnterKey(event) {
+  if(event.key === 'Enter'){
+    addTaskHandler(event);
+  }
+}
+
 
 function addTaskHandler(event){
   var taskInput = document.querySelector('.task-input');
@@ -46,13 +49,56 @@ function addTaskHandler(event){
   taskInput.value = '';
 }
 
-// API functions
+function updateTaskHandler(event, task) {
+  var taskName = task.name;
+
+  var taskInput = $('.task-input');
+  var taskSubmitBtn = $('.task-add-btn');
+
+  // setting the text to be updated
+  taskInput.value = taskName;
+  taskInput.removeEventListener('keyup', handleEnterKey);
+  taskInput.addEventListener('keyup', handleEnterKeyWrapper);
+  taskInput.focus();
+
+  // changing the taskSubmitBtn for update
+  taskSubmitBtn.innerText = 'Update Task';
+  taskSubmitBtn.removeEventListener('click', addTaskHandler);
+  taskSubmitBtn.addEventListener('click', updateTaskWrapper);
+
+  // updateTaskWrapper
+  function updateTaskWrapper(event) {
+    var name = taskInput.value;
+
+    updateTask(task.id, name, task.completed);
+
+    // reset the taskInput and taskSubmitBtn
+    taskInput.value = "";
+    taskInput.removeEventListener('keyup', handleEnterKeyWrapper);
+    taskInput.addEventListener('keyup', handleEnterKey);
+
+    taskSubmitBtn.innerText = 'Add Task';
+    taskSubmitBtn.removeEventListener('click', updateTaskWrapper);
+    taskSubmitBtn.addEventListener('click', addTaskHandler);
+
+    taskInput.focus();
+  }
+
+  function handleEnterKeyWrapper(event) {
+    if(event.key === 'Enter'){
+      updateTaskWrapper(event);
+    }
+  }
+}
+
+
+// API functions --------------------------------------------------------
 
 function displayTasks() {
   var ul = document.querySelector('#tasks-list');
   ul.replaceChildren();
 
-  var filteredTasks = tasks;
+  var filteredTasks = tasks.list;
 
   var filter = document.querySelector('.filters').value;
   if(filter === 'completed'){
@@ -89,7 +135,7 @@ function displayTasks() {
     var updateBtn = document.createElement('button');
     updateBtn.classList.add('update-btn');
     updateBtn.innerText = 'Edit';
-    // updateBtn.addEventListener('click', )
+    updateBtn.addEventListener('click', (event) => updateTaskHandler(event, task));
 
 
     li.appendChild(p);
@@ -100,14 +146,17 @@ function displayTasks() {
     ul.appendChild(li);
   });
 
+  // focus on the taskInput
+  setTimeout(() => $('.task-input').focus(), 100);
+
 }
 
 function addTask(id, name, completed=false){
-  tasks.push({
+  tasks.list = tasks.list.concat([{
     id,
     name,
     completed
-  });
+  }]);
 
   // re-rendering the tasks on the webpage
   displayTasks();
@@ -117,7 +166,7 @@ function addTask(id, name, completed=false){
 function completeTask(id) {
   // needs improvement 'cause map will run the function on the whole array
   // even if the target task is found
-  tasks = tasks.map(function complete(task) {
+  tasks.list = tasks.list.map(function complete(task) {
     if(task.id === id){
       return {...task, completed: true};
     }
@@ -129,10 +178,10 @@ function completeTask(id) {
 }
 
 /* Update the task in the task array*/
-function updateTask(id, name, completed) {
-  if(!id || !name || !completed) return;
+function updateTask(id, name, completed = false) {
+  if(!id || !name) return;
 
-  tasks = tasks.map(function update(task) {
+  tasks.list = tasks.list.map(function update(task) {
     if(task.id === id){
       return {
         id,
@@ -142,12 +191,14 @@ function updateTask(id, name, completed) {
     }
 
     return task;
-  })
+  });
+
+  displayTasks();
 
 }
 
 function deleteTask(id) {
-  tasks = tasks.filter(function del(task) {
+  tasks.list = tasks.list.filter(function del(task) {
     if(task.id === id){
       return false;
     }
@@ -162,9 +213,9 @@ function deleteTask(id) {
  * @param {boolean} completed: the filter
  * @returns {Array} Returns the new filtered array*/
 function filterTasks(completed=true) {
-  return tasks.filter(function filter(task) {
+  return tasks.list.filter(function filter(task) {
     return task.completed === completed;
-  })
+  });
 }
 
 /*
@@ -172,7 +223,29 @@ function filterTasks(completed=true) {
   - Display tasks after they're "loaded."
   */
 function loadTasks() {
+  if(!localStorage.getItem('tasks')){
+    localStorage.setItem('tasks', JSON.stringify([]));
+  }
 
+  var tasks = {
+    _tasks: JSON.parse(localStorage.getItem('tasks')),
+    get list(){
+      return this._tasks;
+    },
+    set list(tasksList){
+      this._tasks = tasksList;
+      console.log(this._tasks);
+
+      // saving the new tasksList to localStorage
+      localStorage.setItem('tasks', JSON.stringify(tasksList));
+    }
+  };
+
+  setTimeout(function() {
+    displayTasks();
+  }, 2000);
+
+  return tasks;
 }
 
 async function loadTasksAsync() {
