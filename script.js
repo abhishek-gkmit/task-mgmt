@@ -60,12 +60,17 @@ function updateTaskHandler(event, task) {
 
   var taskInput = $('.task-input');
   var taskSubmitBtn = $('.task-add-btn');
+  var taskPriority = $('.priority');
 
   // setting the text to be updated
   taskInput.value = taskName;
   taskInput.removeEventListener('keyup', handleEnterKey);
   taskInput.addEventListener('keyup', handleEnterKeyWrapper);
   taskInput.focus();
+
+  // priority setting to update
+  var preservedTaskPriority = taskPriority.value;
+  taskPriority.value = task.priority;
 
   // changing the taskSubmitBtn for update
   taskSubmitBtn.innerText = 'Update Task';
@@ -75,13 +80,16 @@ function updateTaskHandler(event, task) {
   // updateTaskWrapper
   function updateTaskWrapper(event) {
     var name = taskInput.value;
+    var priority = taskPriority.value;
 
-    updateTask(task.id, name, task.completed);
+    updateTask(task.id, name, task.completed, priority);
 
     // reset the taskInput and taskSubmitBtn
     taskInput.value = "";
     taskInput.removeEventListener('keyup', handleEnterKeyWrapper);
     taskInput.addEventListener('keyup', handleEnterKey);
+
+    taskPriority.value = preservedTaskPriority;
 
     taskSubmitBtn.innerText = 'Add Task';
     taskSubmitBtn.removeEventListener('click', updateTaskWrapper);
@@ -205,7 +213,7 @@ function completeTask(id) {
 }
 
 /* Update the task in the task array*/
-function updateTask(id, name, completed = false) {
+function updateTask(id, name, completed = false, priority="normal") {
   if(!id || !name) return;
 
   tasks.list = tasks.list.map(function update(task) {
@@ -213,7 +221,8 @@ function updateTask(id, name, completed = false) {
       return {
         id,
         name,
-        completed
+        completed,
+        priority
       };
     }
 
@@ -279,6 +288,7 @@ async function loadTasksAsync() {
 
 }
 
+// EXTRA API functions
 function sortWithPriority(filteredTasks, priority) {
   filteredTasks = filteredTasks.sort(function compare(a, b) {
     if(a.priority === priority){
