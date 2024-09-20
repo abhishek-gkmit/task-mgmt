@@ -41,6 +41,8 @@ function handleEnterKey(event) {
 function addTaskHandler(event){
   var taskInput = document.querySelector('.task-input');
   var taskPriority = $('.priority').value;
+  // checking if the user had selected the priority or not
+  taskPriority = taskPriority === 'all' ? 'normal' : taskPriority;
   var name = taskInput.value;
 
   if(!name){
@@ -89,7 +91,7 @@ function updateTaskHandler(event, task) {
   // updateTaskWrapper
   function updateTaskWrapper(event) {
     var name = taskInput.value;
-    var priority = taskPriority.value;
+    var priority = taskPriority.value === 'all' ? 'normal' : taskPriority.value;
 
     updateTask(task.id, name, task.completed, priority);
 
