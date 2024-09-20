@@ -11,8 +11,9 @@
 <body>
   <div id="app">
     <div class="add-task-container">
-      <input type="text" class="task-input" placeholder="Enter task name" autofocus>
-      <select name="priority" class="priority" title="Select task priority">
+      <input type="text" class="task-input" placeholder="Enter task name" autofocus required>
+      <select name="priority" class="priority" title="Select task priority" required>
+        <option value="all" selected>Select Priority</option>
         <option value="normal">Normal</option>
         <option value="high">High</option>
         <option value="urgent">Urgent</option>

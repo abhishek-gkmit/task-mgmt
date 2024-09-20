@@ -61,6 +61,15 @@ function updateTaskHandler(event, task) {
   var taskInput = $('.task-input');
   var taskSubmitBtn = $('.task-add-btn');
   var taskPriority = $('.priority');
+  var addTaskContainer = $('.add-task-container');
+
+  var cancelTaskUpdate = document.createElement('button');
+  cancelTaskUpdate.classList.add('cancel-task-btn');
+  cancelTaskUpdate.innerText = 'Cancel';
+  cancelTaskUpdate.addEventListener('click', cancelTaskUpdateHandler);
+  addTaskContainer.appendChild(cancelTaskUpdate);
+
+  addTaskContainer.classList.add('being-updated');
 
   // setting the text to be updated
   taskInput.value = taskName;
@@ -84,6 +93,23 @@ function updateTaskHandler(event, task) {
 
     updateTask(task.id, name, task.completed, priority);
 
+    resetUI();
+  }
+
+  // cancel task update handler
+  function cancelTaskUpdateHandler() {
+    resetUI();
+    addTaskContainer.removeChild(cancelTaskUpdate);
+    addTaskContainer.classList.remove('being-updated');
+  }
+
+  function handleEnterKeyWrapper(event) {
+    if(event.key === 'Enter'){
+      updateTaskWrapper(event);
+    }
+  }
+
+  function resetUI(){
     // reset the taskInput and taskSubmitBtn
     taskInput.value = "";
     taskInput.removeEventListener('keyup', handleEnterKeyWrapper);
@@ -96,12 +122,6 @@ function updateTaskHandler(event, task) {
     taskSubmitBtn.addEventListener('click', addTaskHandler);
 
     taskInput.focus();
-  }
-
-  function handleEnterKeyWrapper(event) {
-    if(event.key === 'Enter'){
-      updateTaskWrapper(event);
-    }
   }
 }
 

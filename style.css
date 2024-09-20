@@ -94,6 +94,7 @@
 .priority,
 .task-add-btn,
 .task-input,
+.cancel-task-btn,
 .priority-filter {
   font-size: 16px;
   padding: 2px 4px;
@@ -145,5 +146,23 @@
 
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ------------------------- Loader end */
+
+.being-updated {
+  border: 1px solid orange;
+  animation: blink 1s linear infinite;
+  margin: 10px;
+}
+
+@keyframes blink {
+  from {
+    border-color: rgba(255, 165, 0, 1);
+  }
+
+  to {
+    border-color: rgba(255, 165, 0, 0);
   }
 }
