@@ -1,7 +1,7 @@
 var tasks;
 
 // document.querySelector shortcut
-var $ = function (selector) {
+var $ = function(selector) {
   return document.querySelector(selector);
 }
 
@@ -10,8 +10,6 @@ document.addEventListener('DOMContentLoaded', function setup() {
   tasks = loadTasks();
   addEventListeners();
 
-  // set default date to today's date
-  $('.date-input').value = (new Date()).toISOString().slice(0,10);
 });
 
 
@@ -35,20 +33,20 @@ function addEventListeners() {
 }
 
 function handleEnterKey(event) {
-  if(event.key === 'Enter'){
+  if (event.key === 'Enter') {
     addTaskHandler(event);
   }
 }
 
 
-function addTaskHandler(event){
+function addTaskHandler(event) {
   var taskInput = document.querySelector('.task-input');
   var taskPriority = $('.priority').value;
   // checking if the user had selected the priority or not
   taskPriority = taskPriority === 'all' ? 'normal' : taskPriority;
   var name = taskInput.value;
 
-  if(!name){
+  if (!name) {
     console.log('Empty task can not be added');
     return;
   }
@@ -109,12 +107,12 @@ function updateTaskHandler(event, task) {
   }
 
   function handleEnterKeyWrapper(event) {
-    if(event.key === 'Enter'){
+    if (event.key === 'Enter') {
       updateTaskWrapper(event);
     }
   }
 
-  function resetUI(){
+  function resetUI() {
     // reset the taskInput and taskSubmitBtn
     taskInput.value = "";
     taskInput.removeEventListener('keyup', handleEnterKeyWrapper);
@@ -144,9 +142,9 @@ function displayTasks() {
   var filteredTasks = tasks.list;
 
   var filter = document.querySelector('.filters').value;
-  if(filter === 'completed'){
+  if (filter === 'completed') {
     filteredTasks = filterTasks();
-  } else if(filter === 'pending') {
+  } else if (filter === 'pending') {
     filteredTasks = filterTasks(false);
   }
 
@@ -163,7 +161,7 @@ function displayTasks() {
     var p = document.createElement('p');
     p.classList.add('task-name');
     p.innerText = task.name;
-    if(task.completed){
+    if (task.completed) {
       p.classList.add('completed-task');
     }
 
@@ -213,7 +211,7 @@ function displayTasks() {
 
 }
 
-function addTask(id, name, completed=false, priority='normal'){
+function addTask(id, name, completed = false, priority = 'normal') {
   tasks.list = tasks.list.concat([{
     id,
     name,
@@ -230,8 +228,8 @@ function toggleTask(id) {
   // needs improvement 'cause map will run the function on the whole array
   // even if the target task is found
   tasks.list = tasks.list.map(function complete(task) {
-    if(task.id === id){
-      return {...task, completed: !task.completed};
+    if (task.id === id) {
+      return { ...task, completed: !task.completed };
     }
 
     return task;
@@ -241,11 +239,11 @@ function toggleTask(id) {
 }
 
 /* Update the task in the task array*/
-function updateTask(id, name, completed = false, priority="normal") {
-  if(!id || !name) return;
+function updateTask(id, name, completed = false, priority = "normal") {
+  if (!id || !name) return;
 
   tasks.list = tasks.list.map(function update(task) {
-    if(task.id === id){
+    if (task.id === id) {
       return {
         id,
         name,
@@ -263,7 +261,7 @@ function updateTask(id, name, completed = false, priority="normal") {
 
 function deleteTask(id) {
   tasks.list = tasks.list.filter(function del(task) {
-    if(task.id === id){
+    if (task.id === id) {
       return false;
     }
 
@@ -276,23 +274,23 @@ function deleteTask(id) {
 /* Filter the tasks according to the completed state
  * @param {boolean} completed: the filter
  * @returns {Array} Returns the new filtered array*/
-function filterTasks(completed=true) {
+function filterTasks(completed = true) {
   return tasks.list.filter(function filter(task) {
     return task.completed === completed;
   });
 }
 
 function loadTasks() {
-  if(!localStorage.getItem('tasks')){
+  if (!localStorage.getItem('tasks')) {
     localStorage.setItem('tasks', JSON.stringify([]));
   }
 
   var tasks = {
     _tasks: JSON.parse(localStorage.getItem('tasks')),
-    get list(){
+    get list() {
       return this._tasks;
     },
-    set list(tasksList){
+    set list(tasksList) {
       this._tasks = tasksList;
 
       // saving the new tasksList to localStorage
@@ -314,10 +312,10 @@ async function loadTasksAsync() {
 // EXTRA API functions
 function sortWithPriority(filteredTasks, priority) {
   filteredTasks = filteredTasks.sort(function compare(a, b) {
-    if(a.priority === priority){
+    if (a.priority === priority) {
       // a should come before b
       return -1;
-    } else if(b.priority === priority){
+    } else if (b.priority === priority) {
       // b should come before a
       return 1;
     }
