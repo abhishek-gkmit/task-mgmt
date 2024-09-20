@@ -11,37 +11,39 @@
 <body>
   <div id="app">
     <div class="add-task-container">
-      <input type="text" class="task-input" placeholder="Enter task name" autofocus required>
+      <input id="task-input" type="text" class="task-input" placeholder="Enter task name" autofocus>
       <select name="priority" class="priority" title="Select task priority" required>
         <option value="all" selected>Select Priority</option>
         <option value="normal">Normal</option>
         <option value="high">High</option>
         <option value="urgent">Urgent</option>
       </select>
+      <!-- <div> -->
+      <!--   <label for="date-input">Select Deadline: </label> -->
+      <!--   <input id="date-input" type="date" class="date-input"> -->
+      <!-- </div> -->
       <button class="task-add-btn" title="Add task to task list">Add Task</button>
     </div>
 
-    <!-- <div class="search-container"> -->
-    <!--   <input type="text" class="search-box" placeholder="Type text to search"> -->
-    <!--   <button class="search-btn">Search</button> -->
-    <!-- </div> -->
-
     <div class="filter-container">
-      <label for="state-filter">Arrange by state: </label>
-      <select id="state-filter" class="filters" name="filter" title="Select filter">
-        <option value="all" selected>All</option>
-        <option value="completed">Completed</option>
-        <option value="pending">Pending</option>
-      </select>
-    </div>
+      <div>
 
-    <div class="filter-container">
-      <label for="priority-filter">Sort by priority: </label>
-      <select id="priority-filter" name="priorityFilter" class="priority-filter" title="Select task priority">
-        <option value="normal">Normal</option>
-        <option value="high">High</option>
-        <option value="urgent">Urgent</option>
-      </select>
+        <label for="state-filter">Arrange by state: </label>
+        <select id="state-filter" class="filters" name="filter" title="Select filter">
+          <option value="all" selected>All</option>
+          <option value="completed">Completed</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+
+      <div>
+        <label for="priority-filter">Sort by priority: </label>
+        <select id="priority-filter" name="priorityFilter" class="priority-filter" title="Select task priority">
+          <option value="normal">Normal</option>
+          <option value="high">High</option>
+          <option value="urgent">Urgent</option>
+        </select>
+      </div>
     </div>
 
     <ul id="tasks-list">

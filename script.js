@@ -9,6 +9,9 @@ var $ = function (selector) {
 document.addEventListener('DOMContentLoaded', function setup() {
   tasks = loadTasks();
   addEventListeners();
+
+  // set default date to today's date
+  $('.date-input').value = (new Date()).toISOString().slice(0,10);
 });
 
 
