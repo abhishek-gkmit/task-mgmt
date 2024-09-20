@@ -154,7 +154,7 @@ function displayTasks() {
     var toggleBtn = document.createElement('button');
     toggleBtn.classList.add('complete-btn');
     // toggleBtn.innerText = 'Mark Complete';
-    toggleBtn.innerText = '✅';
+    toggleBtn.innerText = task.completed ? '☑️' : '✅';
     toggleBtn.setAttribute('title', task.completed ? 'Mark task as uncomplete' : 'Mark task as complete');
     toggleBtn.addEventListener('click', (event) => toggleTask(task.id));
 
@@ -172,9 +172,9 @@ function displayTasks() {
 
     li.appendChild(p);
     container.appendChild(priority);
-    container.appendChild(deleteBtn);
-    container.appendChild(toggleBtn);
     container.appendChild(updateBtn);
+    container.appendChild(toggleBtn);
+    container.appendChild(deleteBtn);
     li.appendChild(container);
 
     ul.appendChild(li);
