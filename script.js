@@ -151,12 +151,12 @@ function displayTasks() {
     deleteBtn.setAttribute('title', 'Delete task');
     deleteBtn.addEventListener('click', (event) => deleteTask(task.id));
 
-    var completeBtn = document.createElement('button');
-    completeBtn.classList.add('complete-btn');
-    // completeBtn.innerText = 'Mark Complete';
-    completeBtn.innerText = '✅';
-    completeBtn.setAttribute('title', 'Mark task as completed');
-    completeBtn.addEventListener('click', (event) => completeTask(task.id));
+    var toggleBtn = document.createElement('button');
+    toggleBtn.classList.add('complete-btn');
+    // toggleBtn.innerText = 'Mark Complete';
+    toggleBtn.innerText = '✅';
+    toggleBtn.setAttribute('title', task.completed ? 'Mark task as uncomplete' : 'Mark task as complete');
+    toggleBtn.addEventListener('click', (event) => toggleTask(task.id));
 
     var updateBtn = document.createElement('button');
     updateBtn.classList.add('update-btn');
@@ -173,7 +173,7 @@ function displayTasks() {
     li.appendChild(p);
     container.appendChild(priority);
     container.appendChild(deleteBtn);
-    container.appendChild(completeBtn);
+    container.appendChild(toggleBtn);
     container.appendChild(updateBtn);
     li.appendChild(container);
 
@@ -198,12 +198,12 @@ function addTask(id, name, completed=false, priority='normal'){
 }
 
 /* Complete the task using the id*/
-function completeTask(id) {
+function toggleTask(id) {
   // needs improvement 'cause map will run the function on the whole array
   // even if the target task is found
   tasks.list = tasks.list.map(function complete(task) {
     if(task.id === id){
-      return {...task, completed: true};
+      return {...task, completed: !task.completed};
     }
 
     return task;
