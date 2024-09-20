@@ -18,13 +18,16 @@
   gap: 10px;
   list-style: none;
   padding: 10px;
-  width: 70%;
+  width: 100%;
+  max-width: 600px;
 }
 
-.add-task-container {
+.add-task-container,
+.search-container {
   display: flex;
   gap: 5px;
   padding: 10px;
+  /* min-width: 665px; */
 }
 
 .task-container {
@@ -45,12 +48,7 @@
 
 .btn-container {
   display: flex;
-  gap: 5px;
-}
-
-.task-input {
-  font-size: 18px;
-  /* border: 1px solid black; */
+  /* gap: 5px; */
 }
 
 .completed-task {
@@ -95,7 +93,8 @@
 .task-add-btn,
 .task-input,
 .cancel-task-btn,
-.priority-filter {
+.priority-filter,
+.search-box {
   font-size: 16px;
   padding: 2px 4px;
   border: 1px solid rgba(32, 32, 32, 0.4);
@@ -106,6 +105,9 @@
 .urgent {
   font-size: 14px;
   padding-top: 4px;
+  border-right: 1px solid black;
+  padding-right: 5px;
+  margin-right: 5px;
 }
 
 .normal {
@@ -124,6 +126,8 @@
   display: flex;
   justify-content: space-between;
   width: 40%;
+  max-width: 350px;
+  min-width: 235px;
 }
 
 /*------------------- Loader*/

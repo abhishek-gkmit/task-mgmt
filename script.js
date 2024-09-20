@@ -124,6 +124,9 @@ function updateTaskHandler(event, task) {
     taskSubmitBtn.addEventListener('click', addTaskHandler);
 
     taskInput.focus();
+
+    addTaskContainer.removeChild(cancelTaskUpdate);
+    addTaskContainer.classList.remove('being-updated');
   }
 }
 
