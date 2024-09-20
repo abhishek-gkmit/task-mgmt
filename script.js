@@ -270,7 +270,6 @@ function loadTasks() {
     },
     set list(tasksList){
       this._tasks = tasksList;
-      console.log(this._tasks);
 
       // saving the new tasksList to localStorage
       localStorage.setItem('tasks', JSON.stringify(tasksList));

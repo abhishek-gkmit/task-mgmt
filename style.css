@@ -55,6 +55,7 @@
 
 .completed-task {
   color: green;
+  text-decoration: line-through solid green 1px;
 }
 
 .delete-btn,
@@ -123,8 +124,6 @@
   justify-content: space-between;
   width: 40%;
 }
-
-/*TODO: add strikethrough on task name*/
 
 /*------------------- Loader*/
 .loader {
