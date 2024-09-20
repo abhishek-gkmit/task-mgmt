@@ -282,10 +282,6 @@ function filterTasks(completed=true) {
   });
 }
 
-/*
-  - Simulate a 2-second delay using `setTimeout`.
-  - Display tasks after they're "loaded."
-  */
 function loadTasks() {
   if(!localStorage.getItem('tasks')){
     localStorage.setItem('tasks', JSON.stringify([]));
