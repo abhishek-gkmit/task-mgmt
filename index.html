@@ -12,11 +12,11 @@
   <div id="app">
     <div class="add-task-container">
       <input id="task-input" type="text" class="task-input" placeholder="Enter task name" autofocus>
-      <select name="priority" class="priority" title="Select task priority" required>
-        <option value="all" selected>Select Priority</option>
+      <label for="priority">Select Priority: </label>
+      <select id="priority" name="priority" class="priority" title="Select task priority" required>
+        <option value="low">Low</option>
         <option value="normal">Normal</option>
         <option value="high">High</option>
-        <option value="urgent">Urgent</option>
       </select>
       <button class="task-add-btn" title="Add task to task list">Add Task</button>
     </div>
