@@ -176,22 +176,18 @@ function displayTasks() {
     // delete, complete, update
     var deleteBtn = document.createElement('button');
     deleteBtn.classList.add('delete-btn');
-    // deleteBtn.innerText = 'Delete';
     deleteBtn.innerText = '❌';
     deleteBtn.setAttribute('title', 'Delete task');
     deleteBtn.addEventListener('click', (event) => deleteTask(task.id));
 
     var toggleBtn = document.createElement('button');
     toggleBtn.classList.add('complete-btn');
-    // toggleBtn.innerText = 'Mark Complete';
     toggleBtn.innerText = task.completed ? '☑️' : '✅';
     toggleBtn.setAttribute('title', task.completed ? 'Mark task as uncomplete' : 'Mark task as complete');
     toggleBtn.addEventListener('click', (event) => toggleTask(task.id));
 
     var updateBtn = document.createElement('button');
     updateBtn.classList.add('update-btn');
-    // updateBtn.innerText = 'Edit';
-    // updateBtn.innerText = '✏️';
     if (task.completed) {
       updateBtn.disabled = true;
       updateBtn.innerText = '🔏';
