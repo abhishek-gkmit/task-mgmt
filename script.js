@@ -191,8 +191,15 @@ function displayTasks() {
     var updateBtn = document.createElement('button');
     updateBtn.classList.add('update-btn');
     // updateBtn.innerText = 'Edit';
-    updateBtn.innerText = '✏️';
-    updateBtn.setAttribute('title', 'Edit task');
+    // updateBtn.innerText = '✏️';
+    if (task.completed) {
+      updateBtn.disabled = true;
+      updateBtn.innerText = '🔏';
+      updateBtn.setAttribute('title', 'Completed tasks can not be edited');
+    } else {
+      updateBtn.innerText = '🖋';
+      updateBtn.setAttribute('title', 'Edit task');
+    }
     updateBtn.addEventListener('click', (event) => updateTaskHandler(event, task));
 
     var priority = document.createElement('p');
@@ -327,6 +334,9 @@ async function loadTasksAsync() {
     }
   };
 
+  // displayTasks() will be called after this loadTasksAsync() function is resolved
+  // Why? because loadTasksAsync() function will resolve immediately
+  // and setTimeout() will take some time to call displayTasks() function
   setTimeout(function() {
     displayTasks();
   }, 2000);
