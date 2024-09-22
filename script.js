@@ -7,7 +7,11 @@ var $ = function(selector) {
 
 
 document.addEventListener('DOMContentLoaded', function setup() {
-  tasks = loadTasks();
+  // tasks = loadTasks();
+  loadTasksAsync().then((loadedTasks) => {
+    console.log(loadedTasks);
+    tasks = loadedTasks;
+  });
   addEventListeners();
 
 });
@@ -172,23 +176,26 @@ function displayTasks() {
     // delete, complete, update
     var deleteBtn = document.createElement('button');
     deleteBtn.classList.add('delete-btn');
-    // deleteBtn.innerText = 'Delete';
     deleteBtn.innerText = '❌';
     deleteBtn.setAttribute('title', 'Delete task');
     deleteBtn.addEventListener('click', (event) => deleteTask(task.id));
 
     var toggleBtn = document.createElement('button');
     toggleBtn.classList.add('complete-btn');
-    // toggleBtn.innerText = 'Mark Complete';
     toggleBtn.innerText = task.completed ? '☑️' : '✅';
     toggleBtn.setAttribute('title', task.completed ? 'Mark task as uncomplete' : 'Mark task as complete');
     toggleBtn.addEventListener('click', (event) => toggleTask(task.id));
 
     var updateBtn = document.createElement('button');
     updateBtn.classList.add('update-btn');
-    // updateBtn.innerText = 'Edit';
-    updateBtn.innerText = '✏️';
-    updateBtn.setAttribute('title', 'Edit task');
+    if (task.completed) {
+      updateBtn.disabled = true;
+      updateBtn.innerText = '🔏';
+      updateBtn.setAttribute('title', 'Completed tasks can not be edited');
+    } else {
+      updateBtn.innerText = '🖋';
+      updateBtn.setAttribute('title', 'Edit task');
+    }
     updateBtn.addEventListener('click', (event) => updateTaskHandler(event, task));
 
     var priority = document.createElement('p');
@@ -306,6 +313,31 @@ function loadTasks() {
 }
 
 async function loadTasksAsync() {
+  if (!localStorage.getItem('tasks')) {
+    localStorage.setItem('tasks', JSON.stringify([]));
+  }
+
+  var tasks = {
+    _tasks: JSON.parse(localStorage.getItem('tasks')),
+    get list() {
+      return this._tasks;
+    },
+    set list(tasksList) {
+      this._tasks = tasksList;
+
+      // saving the new tasksList to localStorage
+      localStorage.setItem('tasks', JSON.stringify(tasksList));
+    }
+  };
+
+  // displayTasks() will be called after this loadTasksAsync() function is resolved
+  // Why? because loadTasksAsync() function will resolve immediately
+  // and setTimeout() will take some time to call displayTasks() function
+  setTimeout(function() {
+    displayTasks();
+  }, 2000);
+
+  return tasks;
 
 }
 
