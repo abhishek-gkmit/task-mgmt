@@ -7,7 +7,11 @@ var $ = function(selector) {
 
 
 document.addEventListener('DOMContentLoaded', function setup() {
-  tasks = loadTasks();
+  // tasks = loadTasks();
+  loadTasksAsync().then((loadedTasks) => {
+    console.log(loadedTasks);
+    tasks = loadedTasks;
+  });
   addEventListeners();
 
 });
@@ -306,6 +310,28 @@ function loadTasks() {
 }
 
 async function loadTasksAsync() {
+  if (!localStorage.getItem('tasks')) {
+    localStorage.setItem('tasks', JSON.stringify([]));
+  }
+
+  var tasks = {
+    _tasks: JSON.parse(localStorage.getItem('tasks')),
+    get list() {
+      return this._tasks;
+    },
+    set list(tasksList) {
+      this._tasks = tasksList;
+
+      // saving the new tasksList to localStorage
+      localStorage.setItem('tasks', JSON.stringify(tasksList));
+    }
+  };
+
+  setTimeout(function() {
+    displayTasks();
+  }, 2000);
+
+  return tasks;
 
 }
 
